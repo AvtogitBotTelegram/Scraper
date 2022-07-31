@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "scraper"
+version = "0.1.0"
+description = ""
+authors = ["Vladislav Gorokhov <gvsnbala@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+selenium = "^4.3.0"
+selenium-wire = "^4.6.5"
+httpx = "^0.23.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^5.0.0"
+mypy = "^0.971"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
