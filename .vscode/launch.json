@@ -1,0 +1,13 @@
+{
+"version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Scraper",
+            "type": "python",
+            "request": "launch",
+            "module": "scraper",
+            "justMyCode": true,
+            "console": "internalConsole"
+        },
+    ]
+}
