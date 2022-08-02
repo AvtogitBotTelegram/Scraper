@@ -9,9 +9,6 @@ from seleniumwire.request import Request
 
 from scraper.config import config
 
-logging.basicConfig(level=logging.WARNING)
-logger = logging.getLogger(__name__)
-
 
 def _to_bytes(body: dict) -> bytes:
     body_list = []
@@ -71,7 +68,6 @@ def main():
 
         driver.get(config.url_host)
         time.sleep(3)
-        logging.debug('Зашеш на сайт emex')
         driver.maximize_window()
         time.sleep(2)
         driver.find_element(By.CLASS_NAME, 'lk2gmii').click()
@@ -85,10 +81,8 @@ def main():
         password_input.send_keys(config.password_emex)
         time.sleep(3)
         driver.find_element(By.CLASS_NAME, 'l1iy1epa').click()
-        logging.debug('ВоВеВв систему')
         time.sleep(3)
         driver.find_element(By.CLASS_NAME, 'l-inmotion').click()
-        logging.debug('ВаВеВ в заказы')
         time.sleep(5)
 
         request = _get_request(driver)
