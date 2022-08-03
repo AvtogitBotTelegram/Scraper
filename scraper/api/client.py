@@ -1,20 +1,21 @@
+import json
+
+import httpx
+
+from scraper.config import config
+
+
 class ApiClient:
 
     def __init__(self) -> None:
-        self.avtogit = Avtogit()
         self.emex = Emex()
-
-
-class Avtogit:
-
-    def send_orders(self):
-        pass
 
 
 class Emex:
 
-    def get_orders(self):
-        pass
+    def get_orders(self, headers: dict, request: bytes, cookies: dict):
+        response = httpx.post(config.api_order, headers=headers, data=request, cookies=cookies)
+        return json.loads(response.content)
 
 
 client = ApiClient()
