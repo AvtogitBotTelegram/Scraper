@@ -17,6 +17,7 @@ class Config:
     password_emex: str
 
     api_order: str
+    user_agent: str
 
 
 config = Config(
@@ -28,5 +29,6 @@ config = Config(
     chromedriver=os.environ['CHROMEDRIVER'],
     login_emex=os.environ['LOGIN_EMEX'],
     password_emex=os.environ['PASSWORD_EMEX'],
-    api_order=os.environ['API_ORDER']
+    api_order=os.environ['API_ORDER'],
+    user_agent=os.environ['USER_AGENT'],
 )
