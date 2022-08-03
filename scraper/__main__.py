@@ -1,6 +1,7 @@
 import logging
 import random
 import time
+import traceback
 
 from selenium.webdriver.common.by import By
 from seleniumwire import webdriver
@@ -8,6 +9,7 @@ from seleniumwire import webdriver
 from scraper.api.client import client
 from scraper.bag import Bag
 from scraper.config import config
+from scraper.api.schemas import Order
 
 
 logging.basicConfig(level=logging.WARNING)
@@ -65,18 +67,32 @@ def main():
         response_all = []
 
         response = client.emex.get_orders(headers=headers, request=body, cookies=cookies)
-        response_all.append(response)
         time.sleep(random_time())
-        for page in range(2, response_all[0]['PagesCount'] + 1):
+        for page in range(1, response['PagesCount'] + 1):
             body = bag.edit_request(request, {'page': page, 'countOnPage': 100})
-            response = client.emex.get_orders(headers=headers, request=body, cookies=cookies)
-            response_all.append(response)
+            responses = client.emex.get_orders(headers=headers, request=body, cookies=cookies)
+            response_all.append([Order(
+                globalId=int(response['GlobalId']),
+                order_date=str(response['POrdDate']),
+                delivery_type=str(response['DeliveryRegionType']),
+                client_logo=str(response['ClientUserLogo']),
+                client_name=str(response['ClientUserName']),
+                client_full_name=str(response['ClientSort']),
+                detail_num=str(response['DetailNum']),
+                detail_label=str(response['DetailLabel']),
+                sum_value=int(response['SumValue']),
+                sum_profit=int(response['SumProfitValue']),
+                return_data=str(response['ReturnBoundDate']),
+                return_data_shipping=str(response['ReturnShippingEndDate']),
+                status_shipping=str(response['Statuses'][0]['Title']),
+                arrival_date=str(response['Statuses'][0]['StatusInfo']['Date']),
+            )for response in responses['Rows']])
             time.sleep(random_time())
 
         driver.quit()
 
     except Exception as ex:
-        logger.warning(ex)
+        logger.warning(ex, traceback.format_exc())
     finally:
         driver.quit()
 
