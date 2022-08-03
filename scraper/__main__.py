@@ -1,16 +1,16 @@
-import json
 import logging
 import random
 import time
 
-import httpx
 from selenium.webdriver.common.by import By
 from seleniumwire import webdriver
 
+from scraper.api.client import client
 from scraper.bag import Bag
 from scraper.config import config
 
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -64,13 +64,13 @@ def main():
 
         response_all = []
 
-        response = httpx.post(config.api_order, headers=headers, data=body, cookies=cookies)
-        response_all.append(json.loads(response.content))
+        response = client.emex.get_orders(headers=headers, request=body, cookies=cookies)
+        response_all.append(response)
         time.sleep(random_time())
         for page in range(2, response_all[0]['PagesCount'] + 1):
-            req = bag.edit_request(request, {'page': page})
-            response = httpx.post(config.api_order, headers=headers, data=req, cookies=cookies)
-            response_all.append(json.loads(response.content))
+            body = bag.edit_request(request, {'page': page, 'countOnPage': 100})
+            response = client.emex.get_orders(headers=headers, request=body, cookies=cookies)
+            response_all.append(response)
             time.sleep(random_time())
 
         driver.quit()
