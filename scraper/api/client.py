@@ -8,13 +8,27 @@ from scraper.config import config
 class ApiClient:
 
     def __init__(self) -> None:
-        self.emex = Emex()
+        self.emex = Emex(config.api_order)
+        self.avtogit = Avtogit(config.api_avtogit)
+
+
+class Avtogit:
+
+    def __init__(self, url) -> None:
+        self.url = url
+
+    def send_orders(self, orders: bytes) -> None:
+        response = httpx.post(self.url, data=orders)
+        response.raise_for_status()
 
 
 class Emex:
 
-    def get_orders(self, headers: dict, request: bytes, cookies: dict):
-        response = httpx.post(config.api_order, headers=headers, data=request, cookies=cookies)
+    def __init__(self, url) -> None:
+        self.url = url
+
+    def get_orders(self, headers: dict, request: bytes, cookies: dict) -> dict:
+        response = httpx.post(self.url, headers=headers, data=request, cookies=cookies)
         return json.loads(response.content)
 
 
