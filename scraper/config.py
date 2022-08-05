@@ -17,6 +17,7 @@ class Config:
     password_emex: str
 
     api_order: str
+    api_avtogit: str
     user_agent: str
 
 
@@ -30,5 +31,6 @@ config = Config(
     login_emex=os.environ['LOGIN_EMEX'],
     password_emex=os.environ['PASSWORD_EMEX'],
     api_order=os.environ['API_ORDER'],
+    api_avtogit=os.environ['API_AVTOGIT'],
     user_agent=os.environ['USER_AGENT'],
 )
