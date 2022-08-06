@@ -58,6 +58,8 @@ def main():
         headers = bag.headers(request)
         body = bag.edit_request(request, {'countOnPage': 100})
 
+        driver.quit()
+
         response_all: list[Order] = []
         pages = client.emex.get_orders(headers=headers, request=body, cookies=cookies)['PagesCount']
         time.sleep(random_time())
@@ -86,8 +88,6 @@ def main():
 
         json_response = orjson.dumps([Order.from_orm(order).dict() for order in response_all])
         client.avtogit.send_orders(json_response)
-
-        driver.quit()
 
     except Exception as ex:
         logger.warning(ex, traceback.format_exc())
