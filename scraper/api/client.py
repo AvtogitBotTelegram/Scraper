@@ -17,7 +17,7 @@ class Avtogit:
     def __init__(self, url) -> None:
         self.url = url
 
-    def send_orders(self, orders: bytes) -> None:
+    def send_orders(self, orders) -> None:
         response = httpx.post(self.url, data=orders)
         response.raise_for_status()
 
@@ -27,7 +27,7 @@ class Emex:
     def __init__(self, url) -> None:
         self.url = url
 
-    def get_orders(self, headers: dict, request: bytes, cookies: dict) -> dict:
+    def get_orders(self, headers: dict[str, str], request, cookies: dict[str, str]):
         response = httpx.post(self.url, headers=headers, data=request, cookies=cookies)
         return json.loads(response.content)
 
