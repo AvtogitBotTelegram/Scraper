@@ -2,13 +2,13 @@ import logging
 import random
 import time
 import traceback
+
 import orjson
 
 from scraper.api.client import client
+from scraper.api.schemas import Order
 from scraper.emex.bag import Bag
 from scraper.emex.surfed import Surfed
-from scraper.api.schemas import Order
-
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
