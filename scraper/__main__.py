@@ -7,6 +7,7 @@ import orjson
 
 from scraper.api.client import client
 from scraper.api.schemas import Order
+from scraper.config import config
 from scraper.emex.bag import Bag
 from scraper.emex.surfed import Surfed
 
@@ -15,12 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 def timeout():
-    time.sleep(random.choice((range(3, 8))))
+    time.sleep(random.choice((range(6, 13))))
 
 
 def main():
     try:
-        surfed = Surfed()
+        surfed = Surfed(config)
         driver = surfed.go()
 
         bag = Bag(driver)
@@ -28,7 +29,6 @@ def main():
         cookies = bag.cookies(driver)
         headers = bag.headers(request)
         body = bag.edit_request(request, {'countOnPage': '100'})
-
         driver.quit()
 
         response_all: list[Order] = []
