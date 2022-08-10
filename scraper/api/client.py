@@ -28,8 +28,12 @@ class Emex:
         self.url = url
 
     def get_orders(self, headers: dict[str, str], request, cookies: dict[str, str]):
-        response = httpx.post(self.url, headers=headers, data=request, cookies=cookies)
-        return json.loads(response.content)
+        proxy = {
+            'http://': f'http://{config.login_proxy}:{config.password_proxy}@{config.host_proxy}:{config.port_proxy}'
+        }
+        with httpx.Client(proxies=proxy, timeout=None) as client:
+            response = client.post(self.url, headers=headers, data=request, cookies=cookies)
+            return json.loads(response.content)
 
 
 client = ApiClient()
