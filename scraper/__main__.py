@@ -61,9 +61,9 @@ def main():
         driver = surfed.go()
 
         bag = Bag(driver)
-        request = bag.request(driver)
-        cookies = bag.cookies(driver)
-        headers = bag.headers(request)
+        request = bag.request()
+        cookies = bag.cookies()
+        headers = bag.headers()
         body = bag.edit_request(request, {'countOnPage': '100'})
         driver.quit()
 

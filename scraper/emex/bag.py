@@ -35,20 +35,21 @@ class Bag:
             request[key] = value
         return self._to_bytes(request)
 
-    def cookies(self, driver: webdriver) -> dict[str, str]:
-        cookies = driver.get_cookies()
+    def cookies(self) -> dict[str, str]:
+        cookies = self.webdriver.get_cookies()
         cookie = {c['name']: c['value'] for c in cookies}
         return cookie
 
-    def headers(self, response: Request) -> dict[str, str]:
+    def headers(self) -> dict[str, str]:
         headers = {}
+        response = self.request()
         payload = response.headers._headers
         for header in payload:
             headers[header[0]] = header[1]
         del headers['Content-Length']
         return headers
 
-    def request(self, driver: webdriver) -> Request:
-        for requst in driver.requests:
+    def request(self) -> Request:
+        for requst in self.webdriver.requests:
             if requst.url == config.api_order:
                 return requst
