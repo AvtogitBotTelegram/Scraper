@@ -38,7 +38,13 @@ def convert(order):
     )
 
 
-def parse_orders_page(headers, cookies, request, body, bag):
+def parse_orders_page(bag: Bag) -> list[Order]:
+
+    request = bag.request()
+    cookies = bag.cookies()
+    headers = bag.headers()
+    body = bag.edit_request(request, {'countOnPage': '100'})
+
     response_all: list[Order] = []
     response = client.emex.get_orders(headers=headers, request=body, cookies=cookies)
     timeout()
@@ -59,21 +65,10 @@ def main():
     try:
         surfed = Surfed(config)
         driver = surfed.go()
-
-        bag = Bag(driver)
-        request = bag.request()
-        cookies = bag.cookies()
-        headers = bag.headers()
-        body = bag.edit_request(request, {'countOnPage': '100'})
+        bag_emex = Bag(driver)
         driver.quit()
 
-        orders = parse_orders_page(
-            headers=headers,
-            cookies=cookies,
-            body=body,
-            request=request,
-            bag=bag,
-        )
+        orders = parse_orders_page(bag=bag_emex)
 
         json_response = orjson.dumps([Order.from_orm(order).dict() for order in orders])
         client.avtogit.send_orders(json_response)
