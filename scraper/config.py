@@ -5,6 +5,8 @@ from dataclasses import dataclass
 @dataclass
 class Config:
 
+    execute_now: str
+
     login_proxy: str
     password_proxy: str
     host_proxy: str
@@ -22,6 +24,7 @@ class Config:
 
 
 config = Config(
+    execute_now=os.environ['EXECUTE_NOW'],
     login_proxy=os.environ['LOGIN_PROXY'],
     password_proxy=os.environ['PASSWORD_PROXY'],
     host_proxy=os.environ['HOST_PROXY'],

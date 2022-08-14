@@ -2,6 +2,7 @@ import logging
 import random
 import time
 import traceback
+import schedule
 
 import orjson
 
@@ -38,8 +39,15 @@ def convert(order):
     )
 
 
-def parse_orders_page(headers, cookies, request, body, bag):
-    response_all: list[Order] = []
+def parse_orders_page(bag: Bag, driver) -> list[Order]:
+
+    request = bag.request()
+    cookies = bag.cookies()
+    headers = bag.headers()
+    driver.quit()
+
+    orders: list[Order] = []
+    body = bag.edit_request(request, {'countOnPage': '100'})
     response = client.emex.get_orders(headers=headers, request=body, cookies=cookies)
     timeout()
 
@@ -50,30 +58,18 @@ def parse_orders_page(headers, cookies, request, body, bag):
         timeout()
 
         for order in responses['Rows']:
-            response_all.append(convert(order))
+            orders.append(convert(order))
 
-    return response_all
+    return orders
 
 
 def main():
     try:
         surfed = Surfed(config)
         driver = surfed.go()
+        bag_emex = Bag(driver)
 
-        bag = Bag(driver)
-        request = bag.request()
-        cookies = bag.cookies()
-        headers = bag.headers()
-        body = bag.edit_request(request, {'countOnPage': '100'})
-        driver.quit()
-
-        orders = parse_orders_page(
-            headers=headers,
-            cookies=cookies,
-            body=body,
-            request=request,
-            bag=bag,
-        )
+        orders = parse_orders_page(bag=bag_emex, driver=driver)
 
         json_response = orjson.dumps([Order.from_orm(order).dict() for order in orders])
         client.avtogit.send_orders(json_response)
@@ -85,4 +81,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if config.execute_now == 'False':
+        schedule.every().day.at('18:16').do(main)
+
+        while True:
+            schedule.run_pending()
+    else:
+        main()
