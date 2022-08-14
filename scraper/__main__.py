@@ -2,6 +2,7 @@ import logging
 import random
 import time
 import traceback
+import schedule
 
 import orjson
 
@@ -80,4 +81,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if config.execute_now == 'False':
+        schedule.every().day.at('18:16').do(main)
+
+        while True:
+            schedule.run_pending()
+    else:
+        main()
