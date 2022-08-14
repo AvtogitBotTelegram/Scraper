@@ -355,6 +355,14 @@ idna = {version = "*", optional = true, markers = "extra == \"idna2008\""}
 idna2008 = ["idna"]
 
 [[package]]
+name = "schedule"
+version = "1.1.0"
+description = "Job scheduling for humans."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "selenium"
 version = "4.3.0"
 description = ""
@@ -504,7 +512,7 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "9b9384e54198a33423c8d2dfc1f517bc2fd4d3e1d84d8f67f00b77312a89d8f1"
+content-hash = "6d118b142cc0d81882b9656a32b486a5eebf314753d6607d01c2d0583e5e729a"
 
 [metadata.files]
 anyio = [
@@ -596,6 +604,7 @@ rfc3986 = [
     {file = "rfc3986-1.5.0-py2.py3-none-any.whl", hash = "sha256:a86d6e1f5b1dc238b218b012df0aa79409667bb209e58da56d0b94704e712a97"},
     {file = "rfc3986-1.5.0.tar.gz", hash = "sha256:270aaf10d87d0d4e095063c65bf3ddbc6ee3d0b226328ce21e036f946e421835"},
 ]
+schedule = []
 selenium = []
 selenium-wire = []
 sniffio = [
